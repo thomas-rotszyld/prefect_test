@@ -34,7 +34,7 @@ def extraire_donnees_carrefour(source: str, date: str):
         "date_extraction": date,
         "status": "success"
     }
-    print(f"✅ {donnees_fictives['nb_records']} records extraits de {source}")
+    print(f"✅ {donnees_fictives['nb_records']} records extraits de {source} - Modification repo")
     return donnees_fictives
 
 @task(name="transformation", retries=2)
@@ -143,18 +143,15 @@ def deployer_job_hebdomadaire():
         entrypoint="scheduled_flow.py:etl_carrefour_template"
     )
 
-
     deployment = flow_ref.deploy(
         name="carrefour-etl-hebdo",
         description="ETL Carrefour - exécution hebdomadaire (lundi 06:00)",
-        work_pool_name="local-process",
+        work_pool_name="local-pool",
         schedule=schedule,
         parameters={"source": "hebdo_database", "destination": "hebdo_datawarehouse"},
         tags=["carrefour", "etl", "hebdomadaire"],
         version="1.0.0-hebdo",
     )
-    print(f"✅ Déploiement hebdomadaire créé : {deployment.name}")
-    return deployment
     print(f"✅ Déploiement hebdomadaire créé : {deployment.name}")
     return deployment
 
